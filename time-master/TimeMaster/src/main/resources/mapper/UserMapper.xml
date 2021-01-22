@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.timemaster.dao.UserMapper">
+    <select id="userLogin" resultType="com.timemaster.vo.User" parameterType="com.timemaster.vo.User">
+        select * from user where username = #{username} and password = #{password};
+    </select>
+
+    <update id="upgradeEmployer" parameterType="Integer">
+        update user set status = 2 where id = #{id};
+    </update>
+
+    <update id="upgradeAdmin" parameterType="Integer">
+        update user set status = 0 where id = #{id};
+    </update>
+
+    <select id="findCollectionByid" resultType="com.timemaster.vo.Position" parameterType="Integer">
+        select positions.*
+        from positions, user, user_positions
+        where user.id = #{id}
+        and user.id = user_positions.user_id
+        and user_positions.positions_id = positions.id;
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.timemaster.dao.JobMapper">
+
+    <resultMap id="describes" type="com.timemaster.vo.Position">
+        <id property="id" column="id"/>
+        <result property="job" column="job"/>
+        <result property="company" column="company"/>
+        <result property="salary" column="salary"/>
+        <result property="Jobtype" column="Jobtype"/>
+        <result property="experience" column="experience"/>
+        <result property="worktime" column="worktime"/>
+        <result property="address" column="address"/>
+        <result property="describes" column="describes"/>
+        <collection property="jobdescribes" ofType="com.timemaster.vo.Jobdescribe">
+            <id property="id" column="pid"/>
+            <result property="position_id" column="position_id"/>
+            <result property="describesA" column="describesA"/>
+        </collection>
+    </resultMap>
+
+    <select id="getPosition" resultType="com.timemaster.vo.Position">
+        select * from positions
+    </select>
+
+    <delete id="deleteJobById" parameterType="Integer">
+        delete from positions where positions.id = #{id};
+    </delete>
+
+    <update id="modifyJob" parameterType="com.timemaster.vo.Position">
+        update positions set job = #{job},company = #{company},salary = #{salary},Jobtype = #{Jobtype},experience = #{experience},worktime = #{worktime}, address = #{address}, describes= #{describes} where id = #{id};
+    </update>
+
+    <insert id="addJob">
+        insert into positions (id, job, company, salary, Jobtype, experience, worktime, address, describes) values (#{id}, #{job}, #{company}, #{salary}, #{Jobtype}, #{experience}, #{worktime}, #{address}, #{describes});
+    </insert>
+
+    <select id="getPositionBynameOrCompany" parameterType="String" resultMap="describes">
+        select positions.*, jobdescribe.id as pid, jobdescribe.describesA, jobdescribe.position_id from positions, jobdescribe where jobdescribe.position_id = positions.id and (positions.job = #{nameOrcompany} or positions.company = #{nameOrcompany});
+    </select>
+
+    <select id="getMaxType" resultType="Integer">
+        select mount from tuijian;
+    </select>
+
+    <select id="returnList" resultType="com.timemaster.vo.Position" parameterType="Integer">
+        select positions.* from positions, tuijian where tuijian.mount = #{id} and positions.worktime = tuijian.type;
+    </select>
+
+    <update id="tianjiashoucang" parameterType="String">
+        update tuijian set mount = mount + 1 where type = #{id};
+    </update>
+</mapper>

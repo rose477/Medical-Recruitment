@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /timemaster
+spring:
+  resources:
+    static-locations: classpath:/templates,file:D:/data/
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/timemaster?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.timemaster.vo
+
+  #showSql
+logging:
+  level:
+    com:
+      timemaster: debug
